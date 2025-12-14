@@ -1,0 +1,20 @@
+.logo {
+  height: 30px;
+}
+
+.logo img {
+  height: 100%;
+}
+
+/* Mobile Responsive Styles */
+@media (max-width: 768px) {
+  .logo {
+    height: 25px;
+  }
+}
+
+@media (max-width: 480px) {
+  .logo {
+    height: 20px;
+  }
+}

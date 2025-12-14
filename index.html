@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes" />
+    <meta name="description" content="Pizza Shopping - Order your favorite pizzas online" />
+    <meta name="theme-color" content="#ff6b35" />
+    <title>Pizza Shop - Order Delicious Pizzas</title>
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="stylesheet" href="stylesheet/main.css" />
+    <link rel="stylesheet" href="stylesheet/ui-ux-enhanced.css" />
+
+    <script
+      src="./Scripts/controllers/product-controller.js"
+      type="module"
+    ></script>
+
+    <!-- Auth Guard Script -->
+    <script>
+      // Check if user is logged in
+      (function() {
+        const token = localStorage.getItem('token');
+        if (!token) {
+          // No token found, redirect to login
+          window.location.href = 'login.html';
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <!-- Enhanced Navigation Bar -->
+    <nav class="navbar">
+      <div class="navbar-brand">
+        <button class="sidebar-toggle" id="sidebarToggle" title="Toggle Menu">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+        <i class="fas fa-pizza-slice"></i>
+        <span>Pizza Shop</span>
+      </div>
+
+      <!-- Navbar Links -->
+      <ul class="navbar-menu">
+        <li class="navbar-item">
+          <a href="#home" class="navbar-link" title="Go to Home">
+            <i class="fas fa-home"></i>
+            <span class="link-text">Home</span>
+          </a>
+        </li>
+        <li class="navbar-item">
+          <a href="#menu" class="navbar-link" title="View Menu">
+            <i class="fas fa-utensils"></i>
+            <span class="link-text">Menu</span>
+          </a>
+        </li>
+        <li class="navbar-item">
+          <a href="#contact" class="navbar-link contact-link" title="Contact Us">
+            <i class="fas fa-envelope"></i>
+            <span class="link-text">Contact</span>
+          </a>
+        </li>
+        <li class="navbar-item">
+          <a href="#notifications" class="navbar-link notification-link" title="View Notifications">
+            <i class="fas fa-bell"></i>
+            <span class="link-text">Notifications</span>
+            <span class="notification-badge" id="notificationBadge">3</span>
+          </a>
+        </li>
+        <li class="navbar-item">
+          <a href="#orders" class="navbar-link" title="Your Orders">
+            <i class="fas fa-clipboard-list"></i>
+            <span class="link-text">Orders</span>
+          </a>
+        </li>
+      </ul>
+
+      <!-- Navbar Right Actions -->
+      <div class="navbar-actions">
+        <div class="pizza-dropdown">
+          <button class="pizza-dropdown-toggle" id="pizzaDropdownToggle" title="Filter by Pizza">
+            <i class="fas fa-pizza-slice"></i>
+            <span class="dropdown-text">All Pizzas</span>
+            <i class="fas fa-chevron-down"></i>
+          </button>
+          <div class="pizza-dropdown-menu" id="pizzaDropdownMenu">
+            <div class="dropdown-header">
+              <h4>Choose Pizza</h4>
+              <button class="dropdown-close" id="pizzaDropdownClose">
+                <i class="fas fa-times"></i>
+              </button>
+            </div>
+            <div class="dropdown-options" id="pizzaDropdownOptions">
+              <!-- Pizza options will be loaded here dynamically -->
+              <div class="dropdown-option" data-filter="all">
+                <i class="fas fa-th"></i>
+                <span>All Pizzas</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <a href="login.html" id="loginBtn" class="login-btn" title="Login to your account">
+          <i class="fas fa-sign-in-alt"></i>
+          <span class="link-text">Login</span>
+        </a>
+        <button id="logoutBtn" class="logout-btn" style="display:none;">
+          <i class="fas fa-sign-out-alt"></i>
+          <span class="link-text">Logout</span>
+        </button>
+        <button class="navbar-toggle-mobile" id="mobileMenuToggle" title="Toggle mobile menu">
+          <i class="fas fa-ellipsis-v"></i>
+        </button>
+      </div>
+    </nav>
+
+    <!-- Notification Dropdown -->
+    <div class="notification-dropdown" id="notificationDropdown">
+      <div class="notification-header">
+        <h3>Notifications</h3>
+        <button class="close-notification" id="closeNotifications">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="notification-body">
+        <div class="notification-item">
+          <i class="fas fa-info-circle notification-icon"></i>
+          <div class="notification-content">
+            <p class="notification-title">Welcome to Pizza Shop!</p>
+            <p class="notification-message">Get 20% off on your first order</p>
+            <span class="notification-time">Just now</span>
+          </div>
+        </div>
+        <div class="notification-item">
+          <i class="fas fa-truck notification-icon success"></i>
+          <div class="notification-content">
+            <p class="notification-title">Order Delivered</p>
+            <p class="notification-message">Your order has been delivered successfully</p>
+            <span class="notification-time">2 hours ago</span>
+          </div>
+        </div>
+        <div class="notification-item">
+          <i class="fas fa-star notification-icon warning"></i>
+          <div class="notification-content">
+            <p class="notification-title">Special Offer!</p>
+            <p class="notification-message">Pizza combo available at discounted price</p>
+            <span class="notification-time">5 hours ago</span>
+          </div>
+        </div>
+      </div>
+      <div class="notification-footer">
+        <a href="#" class="view-all">View All Notifications</a>
+      </div>
+    </div>
+
+    <!-- Contact Modal -->
+    <div class="contact-modal" id="contactModal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>Contact Us</h2>
+          <button class="modal-close" id="closeContact">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="contact-info">
+            <div class="contact-item">
+              <i class="fas fa-phone"></i>
+              <div>
+                <h4>Phone</h4>
+                <p>+91-XXX-XXX-XXXX</p>
+              </div>
+            </div>
+            <div class="contact-item">
+              <i class="fas fa-envelope"></i>
+              <div>
+                <h4>Email</h4>
+                <p>support@pizzashop.com</p>
+              </div>
+            </div>
+            <div class="contact-item">
+              <i class="fas fa-map-marker-alt"></i>
+              <div>
+                <h4>Address</h4>
+                <p>123 Pizza Street, Food City</p>
+              </div>
+            </div>
+          </div>
+          <form class="contact-form" id="contactForm">
+            <input type="text" placeholder="Your Name" required>
+            <input type="email" placeholder="Your Email" required>
+            <textarea placeholder="Your Message" rows="4" required></textarea>
+            <button type="submit" class="submit-btn">Send Message</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Contact Modal Overlay -->
+    <div class="modal-overlay" id="contactOverlay"></div>
+
+    <!-- Sidebar Overlay -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- Sidebar Menu -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <h3>Menu</h3>
+        <div class="sidebar-header-actions">
+          <button class="sidebar-collapse" id="sidebarCollapse" title="Collapse sidebar">
+            <i class="fas fa-chevron-left"></i>
+          </button>
+          <button class="sidebar-close" id="sidebarClose">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+      </div>
+      <nav class="sidebar-nav">
+        <a href="#home" class="sidebar-link" data-section="home">
+          <i class="fas fa-home"></i>
+          <span class="sidebar-link-text">Home</span>
+        </a>
+        <a href="#menu" class="sidebar-link" data-section="menu">
+          <i class="fas fa-list"></i>
+          <span class="sidebar-link-text">Our Menu</span>
+        </a>
+        <a href="#pizzas" class="sidebar-link" data-section="pizzas">
+          <i class="fas fa-pizza-slice"></i>
+          <span class="sidebar-link-text">Pizzas</span>
+        </a>
+        <a href="#basket" class="sidebar-link" data-section="basket">
+          <i class="fas fa-shopping-cart"></i>
+          <span class="sidebar-link-text">Your Basket</span>
+        </a>
+        <div class="sidebar-divider"></div>
+        <a href="#settings" class="sidebar-link" data-section="settings">
+          <i class="fas fa-cog"></i>
+          <span class="sidebar-link-text">Settings</span>
+        </a>
+        <a href="#about" class="sidebar-link" data-section="about">
+          <i class="fas fa-info-circle"></i>
+          <span class="sidebar-link-text">About Us</span>
+        </a>
+        <a href="#contact" class="sidebar-link" data-section="contact">
+          <i class="fas fa-phone"></i>
+          <span class="sidebar-link-text">Contact</span>
+        </a>
+      </nav>
+      <div class="sidebar-footer">
+        <p>© 2025 Pizza Shop</p>
+      </div>
+    </aside>
+
+    <div class="main-wrapper">
+      <div class="container-fluid">
+        <!-- Header Section -->
+        <div class="header-section">
+          <div class="header-content">
+            <h1 class="main-title">🍕 Delicious Pizzas Await You</h1>
+            <p class="subtitle">Fresh, Hot, and Ready to Serve</p>
+          </div>
+        </div>
+
+        <div class="row g-4 content-row">
+          <!-- Products Section -->
+          <div class="col-12 col-lg-8">
+            <div class="products-section">
+              <h2 class="section-title">
+                <i class="fas fa-list"></i> Our Menu
+              </h2>
+              <div class="row" id="output">
+                <!-- Pizza cards will be dynamically created here -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Basket Sidebar -->
+          <div class="col-12 col-lg-4">
+            <div class="basket-container">
+              <div class="basket-header">
+                <h3><i class="fas fa-shopping-cart"></i> Your Basket</h3>
+                <span class="basket-badge" id="basketCount">0</span>
+              </div>
+              <ul id="basket" class="basket-list"></ul>
+              <div class="basket-total">
+                <span>Total:</span>
+                <span class="total-price" id="totalPrice">₹0</span>
+              </div>
+              <form class="payment-form">
+                <script src="https://checkout.razorpay.com/v1/payment-button.js" data-payment_button_id="pl_MLsiwkAdKwWFn4" async></script>
+              </form>
+              <p class="basket-info">
+                <i class="fas fa-info-circle"></i> Your items will appear here
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- Loading Spinner -->
+    <div class="loading-spinner" id="loadingSpinner">
+      <div class="spinner"></div>
+      <p>Loading pizzas...</p>
+    </div>
+
+    <!-- Sidebar Toggle Script -->
+    <script src="./Scripts/sidebar.js"></script>
+    <script src="./Scripts/navbar.js"></script>
+   
+  </body>
+</html>
+
